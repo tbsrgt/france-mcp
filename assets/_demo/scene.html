@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=block" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --win: #0d1117; --bar: #161b22; --line: #30363d;
+    --fg: #e6edf3; --dim: #8b949e; --faint: #6e7681;
+    --blue: #79c0ff; --bleu: #3b6fd8; --rouge: #e5484d; --green: #3fb950; --amber: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 760px; background: var(--bg); overflow: hidden; }
+  body { font-family: "JetBrains Mono", Menlo, monospace; color: var(--fg); font-size: 22px; line-height: 1.45; padding: 14px; }
+  .win { position: relative; width: 100%; height: 100%; border: 1px solid var(--line); border-radius: 12px; background: var(--win); overflow: hidden; }
+  .tri { position: absolute; top: 0; left: 0; right: 0; height: 4px; display: flex; }
+  .tri i { flex: 1; } .tri i:nth-child(1) { background: var(--bleu); } .tri i:nth-child(2) { background: #f0f3f6; } .tri i:nth-child(3) { background: var(--rouge); }
+  .bar { height: 50px; margin-top: 4px; background: var(--bar); border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 20px; gap: 9px; }
+  .dot { width: 13px; height: 13px; border-radius: 50%; background: #3d444d; }
+  .title { margin-left: 14px; font-size: 21px; color: var(--dim); }
+  .title b { color: var(--fg); font-weight: 600; }
+  .pill { margin-left: auto; font-size: 21px; padding: 1px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--dim); }
+  .pill.on { color: var(--green); border-color: rgba(63,185,80,.45); background: rgba(63,185,80,.08); }
+  .scene { position: absolute; top: 55px; left: 0; right: 0; bottom: 0; padding: 22px 34px; }
+  .row { display: flex; gap: 14px; }
+  .who { flex: 0 0 auto; font-weight: 700; }
+  .you { color: var(--blue); }
+  .ai { color: var(--fg); }
+  .txt { flex: 1; white-space: pre-wrap; }
+  .ghost { color: transparent; }
+  .q { color: var(--fg); }
+  .muted { color: var(--dim); }
+  .gap { height: 18px; }
+  .caret { display: inline-block; width: 12px; height: 24px; background: var(--fg); vertical-align: -4px; margin-left: 1px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .chip { font-size: 21px; padding: 2px 14px; border: 1px dashed #484f58; border-radius: 8px; color: var(--dim); }
+  .call { margin-bottom: 9px; }
+  .call .l1 { display: flex; gap: 12px; align-items: baseline; }
+  .call .bul { width: 18px; color: var(--amber); font-weight: 700; }
+  .call.ok .bul { color: var(--green); }
+  .call .name { color: var(--blue); font-weight: 600; }
+  .call .args { color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  .call .ms { color: var(--faint); font-size: 21px; }
+  .call .l2 { padding-left: 30px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .call .l2 em { font-style: normal; color: var(--fg); }
+  .answer { margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .answer .txt b { color: var(--green); font-weight: 600; }
+  .answer .li { white-space: pre-wrap; padding-left: 26px; text-indent: -26px; margin-top: 3px; }
+  .answer .src { margin-top: 8px; color: var(--faint); font-size: 21px; }
+  .banner { position: absolute; left: 0; right: 0; top: 46%; text-align: center; font-size: 46px; font-weight: 800; letter-spacing: -0.5px; }
+  .banner span { color: var(--blue); }
+  /* Acte 3 */
+  .proof { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; padding-bottom: 30px; }
+  .proof .big { font-size: 128px; font-weight: 800; letter-spacing: -4px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .proof .big .tot { color: var(--dim); }
+  .proof .big.ok .n { color: var(--green); }
+  .proof .big.ko .n { color: var(--amber); }
+  .proof .lab { font-size: 34px; font-weight: 600; margin-top: 10px; }
+  .proof .sub { font-size: 23px; color: var(--dim); margin-top: 22px; }
+  .proof .sub code { color: var(--blue); }
+  .proof .chips { justify-content: center; margin-top: 26px; max-width: 1000px; }
+  .proof .chip { border-style: solid; color: var(--fg); }
+  .proof .chip i { font-style: normal; color: var(--dim); }
+  .foot { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: 21px; color: var(--faint); }
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="tri"><i></i><i></i><i></i></div>
+  <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="title" id="title"></span><span class="pill" id="pill"></span></div>
+  <div class="scene" id="s1"></div>
+  <div class="scene" id="s2"></div>
+  <div class="scene" id="s3"></div>
+  <div class="banner" id="banner">+ <span>france-mcp</span></div>
+</div>
+<script>
+// window.DEMO est injecté par build.mjs : { question, before, chips, calls[], answer{lead, items[], src}, parity{} }
+const D = window.DEMO;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = (x) => 1 - Math.pow(1 - x, 3);
+const fr = (n) => Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ");
+
+/** Texte « tapé » : la partie non tapée reste dans le flux (transparente) pour éviter tout saut de mise en page. */
+function typed(text, p, caret = true) {
+  const n = Math.round(text.length * clamp(p));
+  const showCaret = caret && p > 0 && p < 1;
+  return esc(text.slice(0, n)) + (showCaret ? '<span class="caret"></span>' : "") + `<span class="ghost">${esc(text.slice(n))}</span>`;
+}
+
+// Chronologie (secondes)
+const T = {
+  q1: [0.2, 1.6], think1: [1.6, 2.0], a1: [2.0, 3.8], chips: 3.9,
+  out1: [5.2, 5.5], banner: [5.4, 5.7, 6.2, 6.5], in2: [6.3, 6.6],
+  calls: 6.8, callStep: 0.75, callRun: 0.45,
+  answer: 9.8, lineStep: 0.5,
+  out2: [13.6, 13.9], in3: [13.9, 14.2], count: [14.2, 15.6], end: 17.0,
+};
+window.POSTER_T = 13.4; // fin de l'acte 2 : réponse complète
+window.DURATION = T.end;
+
+function render(t) {
+  // Barre de titre
+  const act = t < T.out1[1] + 0.2 ? 1 : t < T.out2[1] ? 2 : 3;
+  $("title").innerHTML = act === 1 ? "agent IA · <b>sans outils</b>" : act === 2 ? "agent IA · <b>+ france-mcp</b>" : "<b>france-mcp</b> · parité avec les sources";
+  const pill = $("pill");
+  pill.className = act === 1 ? "pill" : "pill on";
+  pill.textContent = act === 1 ? "0 outil" : `${D.nbOutils} outils · sans clé API`;
+
+  // ACTE 1
+  const s1 = $("s1");
+  s1.style.opacity = 1 - prog(t, ...T.out1);
+  const thinking = t >= T.think1[0] && t < T.think1[1] ? "·".repeat(1 + (Math.floor(t * 6) % 3)) : "";
+  s1.innerHTML = `
+    <div class="row"><span class="who you">vous ›</span><span class="txt q">${typed(D.question, prog(t, ...T.q1))}</span></div>
+    <div class="gap"></div>
+    <div class="row" style="opacity:${t >= T.think1[0] ? 1 : 0}"><span class="who ai">agent ›</span><span class="txt muted">${thinking ? `<span>${thinking}</span>` : typed(D.before, prog(t, ...T.a1))}</span></div>
+    <div class="gap"></div>
+    <div style="opacity:${ease(prog(t, T.chips, T.chips + 0.5))}; padding-left: 112px">
+      <div class="muted" style="font-size:21px">${esc(D.chipsLabel)}</div>
+      <div class="chips">${D.chips.map((c) => `<span class="chip">${esc(c)}</span>`).join("")}</div>
+    </div>`;
+
+  // Bandeau de transition
+  const [b0, b1, b2, b3] = T.banner;
+  const bo = t < b1 ? prog(t, b0, b1) : 1 - prog(t, b2, b3);
+  $("banner").style.opacity = bo;
+  $("banner").style.transform = `scale(${0.96 + 0.04 * ease(prog(t, b0, b1))})`;
+
+  // ACTE 2
+  const s2 = $("s2");
+  s2.style.opacity = prog(t, ...T.in2) * (1 - prog(t, ...T.out2));
+  const calls = D.calls.map((c, i) => {
+    const start = T.calls + i * T.callStep;
+    if (t < start) return `<div class="call" style="opacity:0"><div class="l1"><span class="bul">⏺</span><span class="name">${esc(c.name)}</span></div><div class="l2">&nbsp;</div></div>`;
+    const done = t >= start + T.callRun;
+    const spin = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"[Math.floor(t * 12.5) % 10];
+    return `<div class="call ${done ? "ok" : ""}" style="opacity:${ease(prog(t, start, start + 0.15))}">
+      <div class="l1"><span class="bul">${done ? "✓" : spin}</span><span class="name">${esc(c.name)}</span><span class="args">${esc(c.args)}</span>${done ? `<span class="ms">${c.ms} ms</span>` : ""}</div>
+      <div class="l2" style="opacity:${ease(prog(t, start + T.callRun, start + T.callRun + 0.2))}">⎿ ${c.result}</div>
+    </div>`;
+  }).join("");
+  const A = D.answer;
+  const lines = [A.lead, ...A.items];
+  const ans = lines.map((l, i) => {
+    const a = T.answer + i * T.lineStep;
+    const p = prog(t, a, a + T.lineStep * 0.9);
+    if (i === 0) return `<div class="txt" style="opacity:${t >= a ? 1 : 0}"><b>${typed(l, p, false)}</b></div>`;
+    return `<div class="li" style="opacity:${t >= a ? 1 : 0}">${typed("• " + l, p, false)}</div>`;
+  }).join("");
+  const srcAt = T.answer + lines.length * T.lineStep;
+  s2.innerHTML = `
+    <div class="row"><span class="who you">vous ›</span><span class="txt q muted">${esc(D.questionShort)}</span></div>
+    <div class="gap" style="height:12px"></div>
+    ${calls}
+    <div class="answer" style="opacity:${t >= T.answer ? 1 : 0}">
+      ${ans}
+      <div class="src" style="opacity:${ease(prog(t, srcAt, srcAt + 0.3))}">${esc(A.src)}</div>
+    </div>`;
+
+  // ACTE 3
+  const s3 = $("s3");
+  s3.style.opacity = prog(t, ...T.in3);
+  const P = D.parity;
+  const k = ease(prog(t, ...T.count));
+  const n = P.identiques * k;
+  const ok = P.identiques === P.total;
+  const chipsAt = T.count[1] + 0.2;
+  s3.innerHTML = `
+    <div class="proof">
+      <div class="big ${k >= 1 ? (ok ? "ok" : "ko") : ""}"><span class="n">${fr(n)}</span><span class="tot"> / ${fr(P.total)}</span></div>
+      <div class="lab">réponses identiques à la source officielle</div>
+      <div class="sub">vérifié champ par champ contre l’API officielle — <code>npm run parity</code></div>
+      ${P.champs ? `<div class="sub" style="margin-top:6px">${fr(P.champs)} champs comparés</div>` : ""}
+      ${P.sources.length ? `<div class="chips" style="opacity:${ease(prog(t, chipsAt, chipsAt + 0.4))}">${P.sources.map((s) => `<span class="chip">${esc(s.nom)} <i>${esc(s.val)}</i></span>`).join("")}</div>` : ""}
+    </div>
+    <div class="foot" style="opacity:${ease(prog(t, chipsAt, chipsAt + 0.4))}">${esc(P.foot)}</div>`;
+}
+window.render = render;
+render(0);
+</script>
+</body>
+</html>

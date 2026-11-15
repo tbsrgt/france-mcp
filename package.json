@@ -1,0 +1,54 @@
+{
+  "name": "france-mcp",
+  "version": "0.1.0",
+  "description": "L’État français branché sur l’IA : serveur MCP pour Sirene, BOAMP, DVF, cadastre, BAN, data.gouv, Caparéseau, Légifrance… sans clé API.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/unit.test.mjs",
+    "smoke": "node test/smoke.mjs",
+    "parity": "node test/parity.mjs",
+    "readme:parity": "node scripts/readme-parity.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "open-data",
+    "france",
+    "data.gouv",
+    "sirene",
+    "boamp",
+    "dvf",
+    "cadastre",
+    "legifrance",
+    "claude",
+    "ai-agents"
+  ],
+  "author": "Tobias Ringot",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "bin": {
+    "france-mcp": "src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbsrgt/france-mcp.git"
+  },
+  "homepage": "https://github.com/tbsrgt/france-mcp#readme",
+  "bugs": "https://github.com/tbsrgt/france-mcp/issues"
+}

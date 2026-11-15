@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-15T03:04:43.300Z",
+  "total": 2400,
+  "identiques": 2400,
+  "champs_compares": 18600,
+  "graine": 20261115,
+  "par_source": {
+    "communes": {
+      "total": 600,
+      "identiques": 600,
+      "champs_compares": 4800
+    },
+    "entreprises": {
+      "total": 600,
+      "identiques": 600,
+      "champs_compares": 5400
+    },
+    "boamp": {
+      "total": 600,
+      "identiques": 600,
+      "champs_compares": 4800
+    },
+    "cadastre": {
+      "total": 600,
+      "identiques": 600,
+      "champs_compares": 3600
+    }
+  },
+  "ecarts": {
+    "communes": [],
+    "entreprises": [],
+    "boamp": [],
+    "cadastre": []
+  }
+}

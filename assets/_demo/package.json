@@ -1,0 +1,13 @@
+{
+  "name": "france-mcp-demo-gif",
+  "private": true,
+  "type": "module",
+  "description": "Génère assets/demo.gif (frames HTML rendues par Chrome headless, assemblées par ffmpeg).",
+  "scripts": {
+    "build": "node build.mjs",
+    "refresh": "node build.mjs --refresh"
+  },
+  "dependencies": {
+    "puppeteer-core": "24.10.0"
+  }
+}
