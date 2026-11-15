@@ -1,0 +1,27 @@
+name: Signaler un problème
+description: Un outil renvoie une erreur ou une donnée différente de la source
+labels: ["bug"]
+body:
+  - type: input
+    id: outil
+    attributes:
+      label: Outil concerné
+      placeholder: dvf_ventes
+    validations:
+      required: true
+  - type: textarea
+    id: arguments
+    attributes:
+      label: Arguments envoyés
+      render: json
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Ce que vous obtenez et ce que dit la source officielle
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: Client MCP et version de Node
+      placeholder: Claude Code, Node 22

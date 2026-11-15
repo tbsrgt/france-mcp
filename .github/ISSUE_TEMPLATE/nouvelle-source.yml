@@ -1,0 +1,23 @@
+name: Proposer une source
+description: Une donnée publique française qui manque
+labels: ["nouvelle source"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Source officielle
+      description: Nom du producteur et lien vers l'API ou le jeu de données
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Question qu'un agent pourrait enfin répondre
+      placeholder: "Ex. « Quelle est la qualité de l'eau du robinet à Lyon ? »"
+    validations:
+      required: true
+  - type: dropdown
+    id: cle
+    attributes:
+      label: Faut-il une clé API ?
+      options: ["Non", "Oui, gratuite", "Je ne sais pas"]

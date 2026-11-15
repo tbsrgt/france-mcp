@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions et idées
+    url: https://github.com/tbsrgt/france-mcp/discussions
+    about: Pour échanger sans ouvrir de ticket
